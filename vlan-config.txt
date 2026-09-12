@@ -1,0 +1,243 @@
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! LAB 1 — Switch configs (Packet Tracer CLI)
+! Devices: CORE-SW, ACCESS-SW1, ACCESS-SW2, ACCESS-SW3
+! Suggested models: 2960 (access + core L2)
+!
+! Cabling (recommended):
+!   R1 Gi0/0          <-> CORE-SW Gi0/1     (trunk)
+!   CORE-SW Gi0/2     <-> ACCESS-SW1 Gi0/1  (trunk)
+!   CORE-SW Gi0/3     <-> ACCESS-SW2 Gi0/1  (trunk)
+!   CORE-SW Gi0/4     <-> ACCESS-SW3 Gi0/1  (trunk)
+!   ACCESS-SW1 Fa0/1  <-> PC-HR-1
+!   ACCESS-SW1 Fa0/2  <-> PC-HR-2
+!   ACCESS-SW2 Fa0/1  <-> PC-IT-1
+!   ACCESS-SW2 Fa0/2  <-> PC-IT-2
+!   ACCESS-SW3 Fa0/1  <-> PC-FIN-1
+!   ACCESS-SW3 Fa0/2  <-> PC-FIN-2
+!
+! Optional redundancy: second trunk CORE Gi0/5 <-> SW1 Gi0/2
+! (STP will block one link; CORE is root)
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+!==================== CORE-SW ====================
+enable
+configure terminal
+hostname CORE-SW
+no ip domain-lookup
+enable secret class
+!
+vlan 10
+ name HR
+vlan 20
+ name IT
+vlan 30
+ name FINANCE
+vlan 99
+ name MANAGEMENT
+!
+! Make CORE the STP root for all VLANs
+spanning-tree mode rapid-pvst
+spanning-tree vlan 10,20,30,99 root primary
+!
+interface GigabitEthernet0/1
+ description TRUNK-TO-R1
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30,99
+ no shutdown
+!
+interface GigabitEthernet0/2
+ description TRUNK-TO-SW1
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30,99
+ no shutdown
+!
+interface GigabitEthernet0/3
+ description TRUNK-TO-SW2
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30,99
+ no shutdown
+!
+interface GigabitEthernet0/4
+ description TRUNK-TO-SW3
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30,99
+ no shutdown
+!
+! Optional second uplink to SW1 for STP demo
+! interface GigabitEthernet0/5
+!  description TRUNK-TO-SW1-BACKUP
+!  switchport mode trunk
+!  switchport trunk allowed vlan 10,20,30,99
+!  no shutdown
+!
+interface Vlan99
+ ip address 192.168.99.2 255.255.255.0
+ no shutdown
+!
+ip default-gateway 192.168.99.1
+!
+line console 0
+ password cisco
+ login
+ logging synchronous
+line vty 0 4
+ password cisco
+ login
+!
+end
+write memory
+
+
+!==================== ACCESS-SW1 (HR / VLAN 10) ====================
+enable
+configure terminal
+hostname ACCESS-SW1
+no ip domain-lookup
+enable secret class
+!
+vlan 10
+ name HR
+vlan 20
+ name IT
+vlan 30
+ name FINANCE
+vlan 99
+ name MANAGEMENT
+!
+spanning-tree mode rapid-pvst
+!
+interface range FastEthernet0/1 - 2
+ description HR-PCS
+ switchport mode access
+ switchport access vlan 10
+ spanning-tree portfast
+ no shutdown
+!
+interface GigabitEthernet0/1
+ description TRUNK-TO-CORE
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30,99
+ no shutdown
+!
+! Optional backup trunk to CORE
+! interface GigabitEthernet0/2
+!  description TRUNK-TO-CORE-BACKUP
+!  switchport mode trunk
+!  switchport trunk allowed vlan 10,20,30,99
+!  no shutdown
+!
+interface Vlan99
+ ip address 192.168.99.3 255.255.255.0
+ no shutdown
+!
+ip default-gateway 192.168.99.1
+!
+line console 0
+ password cisco
+ login
+ logging synchronous
+line vty 0 4
+ password cisco
+ login
+!
+end
+write memory
+
+
+!==================== ACCESS-SW2 (IT / VLAN 20) ====================
+enable
+configure terminal
+hostname ACCESS-SW2
+no ip domain-lookup
+enable secret class
+!
+vlan 10
+ name HR
+vlan 20
+ name IT
+vlan 30
+ name FINANCE
+vlan 99
+ name MANAGEMENT
+!
+spanning-tree mode rapid-pvst
+!
+interface range FastEthernet0/1 - 2
+ description IT-PCS
+ switchport mode access
+ switchport access vlan 20
+ spanning-tree portfast
+ no shutdown
+!
+interface GigabitEthernet0/1
+ description TRUNK-TO-CORE
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30,99
+ no shutdown
+!
+interface Vlan99
+ ip address 192.168.99.4 255.255.255.0
+ no shutdown
+!
+ip default-gateway 192.168.99.1
+!
+line console 0
+ password cisco
+ login
+ logging synchronous
+line vty 0 4
+ password cisco
+ login
+!
+end
+write memory
+
+
+!==================== ACCESS-SW3 (Finance / VLAN 30) ====================
+enable
+configure terminal
+hostname ACCESS-SW3
+no ip domain-lookup
+enable secret class
+!
+vlan 10
+ name HR
+vlan 20
+ name IT
+vlan 30
+ name FINANCE
+vlan 99
+ name MANAGEMENT
+!
+spanning-tree mode rapid-pvst
+!
+interface range FastEthernet0/1 - 2
+ description FINANCE-PCS
+ switchport mode access
+ switchport access vlan 30
+ spanning-tree portfast
+ no shutdown
+!
+interface GigabitEthernet0/1
+ description TRUNK-TO-CORE
+ switchport mode trunk
+ switchport trunk allowed vlan 10,20,30,99
+ no shutdown
+!
+interface Vlan99
+ ip address 192.168.99.5 255.255.255.0
+ no shutdown
+!
+ip default-gateway 192.168.99.1
+!
+line console 0
+ password cisco
+ login
+ logging synchronous
+line vty 0 4
+ password cisco
+ login
+!
+end
+write memory
