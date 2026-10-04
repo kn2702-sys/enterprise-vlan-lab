@@ -2,7 +2,7 @@
 
 Estimated time: 45–75 minutes first build.
 
-1. **New** Packet Tracer file → save locally as `enterprise-vlan-lab.pkt` (gitignored).
+1. Open the committed `Lab-1-Enterprise-VLAN.pkt` — or build a **new** Packet Tracer file from `configs/`.
 2. Place **R1**, **CORE-SW**, **ACCESS-SW1/2/3**, six **PC-PT**.
 3. Cable using the map in `configs/vlan-config.txt` header.
 4. Configure switches from `configs/vlan-config.txt` (CORE first, then access).
