@@ -4,9 +4,9 @@ Estimated time: 45–75 minutes first build.
 
 1. **New** Packet Tracer file → save locally as `enterprise-vlan-lab.pkt` (gitignored).
 2. Place **R1**, **CORE-SW**, **ACCESS-SW1/2/3**, six **PC-PT**.
-3. Cable using the map in `vlan-config.txt` header.
-4. Configure switches from `vlan-config.txt` (CORE first, then access).
-5. Configure R1 from `router-config.txt`.
+3. Cable using the map in `configs/vlan-config.txt` header.
+4. Configure switches from `configs/vlan-config.txt` (CORE first, then access).
+5. Configure R1 from `configs/router-config.txt`.
 6. PCs → IP Configuration → **DHCP**.
 7. Verify:
    - `ping` own gateway
