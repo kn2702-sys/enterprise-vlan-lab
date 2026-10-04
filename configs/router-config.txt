@@ -1,0 +1,75 @@
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! LAB 1 — R1 Router-on-a-Stick + DHCP
+! Suggested model: 2911 / 1941 / ISR-style in Packet Tracer
+! Physical: GigabitEthernet0/0 trunked to CORE-SW Gi0/1
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+enable
+configure terminal
+hostname R1
+no ip domain-lookup
+enable secret class
+!
+! --- DHCP exclusions (gateways) ---
+ip dhcp excluded-address 192.168.10.1 192.168.10.10
+ip dhcp excluded-address 192.168.20.1 192.168.20.10
+ip dhcp excluded-address 192.168.30.1 192.168.30.10
+!
+ip dhcp pool HR
+ network 192.168.10.0 255.255.255.0
+ default-router 192.168.10.1
+ dns-server 192.168.10.1
+!
+ip dhcp pool IT
+ network 192.168.20.0 255.255.255.0
+ default-router 192.168.20.1
+ dns-server 192.168.20.1
+!
+ip dhcp pool FINANCE
+ network 192.168.30.0 255.255.255.0
+ default-router 192.168.30.1
+ dns-server 192.168.30.1
+!
+! --- Trunk parent ---
+interface GigabitEthernet0/0
+ no shutdown
+!
+! --- ROAS subinterfaces (802.1Q) ---
+interface GigabitEthernet0/0.10
+ description HR-VLAN10
+ encapsulation dot1Q 10
+ ip address 192.168.10.1 255.255.255.0
+!
+interface GigabitEthernet0/0.20
+ description IT-VLAN20
+ encapsulation dot1Q 20
+ ip address 192.168.20.1 255.255.255.0
+!
+interface GigabitEthernet0/0.30
+ description FINANCE-VLAN30
+ encapsulation dot1Q 30
+ ip address 192.168.30.1 255.255.255.0
+!
+interface GigabitEthernet0/0.99
+ description MGMT-VLAN99
+ encapsulation dot1Q 99
+ ip address 192.168.99.1 255.255.255.0
+!
+line console 0
+ password cisco
+ login
+ logging synchronous
+line vty 0 4
+ password cisco
+ login
+!
+end
+write memory
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+! VERIFY (on R1)
+!   show ip interface brief
+!   show ip dhcp binding
+!   show ip dhcp pool
+! From PC-HR-1: ping 192.168.10.1, then ping 192.168.20.11 / 192.168.30.11
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
