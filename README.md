@@ -7,6 +7,7 @@ Recruiter-facing **Cisco Packet Tracer** lab: department VLANs, 802.1Q trunking,
 | **Author** | [Kazi Nafis Nawaz](https://github.com/kn2702-sys) · MCA (Networking) |
 | **Platform** | Cisco Packet Tracer (NetAcad) |
 | **Skills** | VLAN · Trunk · ROAS · DHCP · STP · ICMP troubleshooting |
+| **Series** | **LAB 1** · [LAB 2](https://github.com/kn2702-sys/dhcp-dns-failure-lab) · [LAB 3](https://github.com/kn2702-sys/LAB-3-Multi-Router-OSPF-Network) · [LAB 4](https://github.com/kn2702-sys/LAB-4-ACL-NAT-Internet-Edge) · [LAB 5](https://github.com/kn2702-sys/LAB-5-Site-to-Site-VPN-Firewall) · [LAB 6](https://github.com/kn2702-sys/LAB-6-Wireshark-NOC-Troubleshooting) · [LAB 7](https://github.com/kn2702-sys/LAB-7-NOC-Incident-Simulation) |
 | **Status** | Docs + device configs complete · rebuild in Packet Tracer |
 
 > Portfolio / learning lab — not a claim of production employment.
@@ -46,7 +47,7 @@ Build a small company network with:
            HR          IT      Finance
 ```
 
-Full cabling and device list: see comments in `vlan-config.txt` and `router-config.txt`.
+Full cabling and device list: see comments in `configs/vlan-config.txt` and `configs/router-config.txt`.
 
 ---
 
@@ -109,8 +110,8 @@ Test connectivity
 
 1. Place devices: 1 router, 1 core L2 switch, 3 access switches, 6 PCs.
 2. Cable as in the topology diagram (router↔core trunk; core↔each access trunk; PCs on access ports).
-3. Paste `vlan-config.txt` sections into each switch CLI.
-4. Paste `router-config.txt` into R1.
+3. Paste `configs/vlan-config.txt` sections into each switch CLI.
+4. Paste `configs/router-config.txt` into R1.
 5. Set PCs to DHCP; verify cross-VLAN ping (HR → IT → Finance).
 6. Run faults from `troubleshooting.md`.
 7. Drop proof screenshots into `screenshots/` (checklist inside that folder).
@@ -123,11 +124,11 @@ Test connectivity
 
 | Question | Where to look |
 | --- | --- |
-| What is a VLAN? | README VLAN plan + `vlan-config.txt` |
+| What is a VLAN? | README VLAN plan + `configs/vlan-config.txt` |
 | Why use trunk ports? | Core↔access and core↔router links |
 | What if native VLAN is wrong? | `troubleshooting.md` Fault F |
 | How can two VLANs communicate? | R1 ROAS subinterfaces |
-| What is router-on-a-stick? | `router-config.txt` |
+| What is router-on-a-stick? | `configs/router-config.txt` |
 | Why same-VLAN works but other VLAN fails? | Missing trunk / wrong gateway / wrong subinterface VLAN ID |
 
 Model answers: [`INTERVIEW.md`](INTERVIEW.md)
@@ -167,3 +168,4 @@ MIT © 2026 Kazi Nafis Nawaz — see [`LICENSE`](LICENSE).
 - GitHub: [kn2702-sys](https://github.com/kn2702-sys)
 - LinkedIn: [kazi-nafis-nawaz-55b670393](https://www.linkedin.com/in/kazi-nafis-nawaz-55b670393)
 - Email: kn2702@srmist.edu.in
+
